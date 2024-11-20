@@ -12,7 +12,7 @@ const variants = {
   primary: "text-blue-600",
 };
 
-export type SpinnerProps = {
+export type SpinnerProps = React.SVGAttributes<SVGElement> & {
   size?: keyof typeof sizes;
   variant?: keyof typeof variants;
   className?: string;

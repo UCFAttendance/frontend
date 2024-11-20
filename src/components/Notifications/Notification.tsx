@@ -13,6 +13,7 @@ const icons = {
     <InformationCircleIcon
       className="h-6 w-6 text-blue-500"
       aria-hidden="true"
+      role="img" // Add role here
     />
   ),
   success: (
@@ -22,9 +23,10 @@ const icons = {
     <ExclamationCircleIcon
       className="h-6 w-6 text-yellow-500"
       aria-hidden="true"
+      role="img" // Add role here
     />
   ),
-  error: <XCircleIcon className="h-6 w-6 text-red-500" aria-hidden="true" />,
+  error: <XCircleIcon className="h-6 w-6 text-red-500" aria-hidden="true" role="img" />,// Add role here
 };
 
 export type NotificationProps = {

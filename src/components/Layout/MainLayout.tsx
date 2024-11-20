@@ -180,7 +180,7 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
                   </ul>
                 </li>
                 <li className="-mx-6 mt-auto">
-                  <div
+                  {/* <div
                     className="flex items-center justify-between hover:bg-gray-50"
                     onClick={() => auth.logout()}
                   >
@@ -190,7 +190,19 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
                       <span aria-hidden="true">{auth.user?.name}</span>
                     </div>
                     <ArrowRightOnRectangleIcon className="h-6 w-6 text-gray-400 mr-6" />
-                  </div>
+                  </div> */}
+                  {/* ADDED THIS */}
+                  <button
+                    className="flex items-center justify-between w-full hover:bg-gray-50 px-6 py-3 text-sm font-semibold leading-6 text-gray-900"
+                    onClick={() => auth.logout()}
+                    aria-label="Logout"
+                  >
+                    <div className="flex items-center gap-x-4">
+                      <UserCircleIcon className="h-8 w-8 rounded-full bg-gray-50" />
+                      <span>{auth.user?.name}</span>
+                    </div>
+                    <ArrowRightOnRectangleIcon className="h-6 w-6 text-gray-400" />
+                  </button>
                 </li>
               </ul>
             </nav>
@@ -225,19 +237,20 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
               leaveTo="transform opacity-0 scale-95"
             >
               <Menu.Items className="absolute right-0 z-10 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
-                <Menu.Item>
-                  {({ active }) => (
-                    <button
-                      className={clsx(
-                        active ? "bg-gray-50" : "",
-                        "block px-3 py-1 text-sm leading-6 text-gray-900"
-                      )}
-                      onClick={() => auth.logout()}
-                    >
-                      Logout
-                    </button>
-                  )}
-                </Menu.Item>
+              <Menu.Item>
+                {({ active }) => (
+                  <button
+                    className={clsx(
+                      active ? "bg-gray-50" : "",
+                      "block px-3 py-1 text-sm leading-6 text-gray-900"
+                    )}
+                    onClick={() => auth.logout()}
+                    aria-label="Logout" //ADDED THIS
+                  >
+                    Logout
+                  </button>
+                )}
+              </Menu.Item>
               </Menu.Items>
             </Transition>
           </Menu>
