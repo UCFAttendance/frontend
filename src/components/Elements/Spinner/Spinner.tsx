@@ -24,7 +24,11 @@ export const Spinner = ({
   className = "",
 }: SpinnerProps) => {
   return (
-    <>
+    <div
+      className="flex items-center justify-center"
+      role="status"
+      aria-live="polite"
+    >
       <svg
         className={clsx(
           "animate-spin",
@@ -52,6 +56,6 @@ export const Spinner = ({
         ></path>
       </svg>
       <span className="sr-only">Loading</span>
-    </>
+    </div>
   );
 };

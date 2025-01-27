@@ -27,14 +27,15 @@ describe("Notification Component", () => {
     expect(screen.getByText("This is a success message.")).toBeInTheDocument();
   });
 
-  //COMMENTED THIS OUT BC IT DOESNT PASS BUT I WANTED TO SEE THE COVERAGE
-  // it("renders the correct icon based on the type", () => {
-  //   render(<Notification {...notificationProps} />);
 
-  //   // Check for the success icon
-  //   const successIcon = screen.getByRole("img", { hidden: true });
-  //   expect(successIcon).toHaveClass("text-green-500");
-  // });
+  it("renders the correct icon based on the type", () => {
+    const { container } = render(<Notification {...notificationProps} />);
+  
+    // Check for the success icon by class name
+    const successIcon = container.querySelector(".text-green-500");
+    expect(successIcon).toBeInTheDocument();
+  });  
+  
 
   it("calls the onDismiss function when the close button is clicked", () => {
     render(<Notification {...notificationProps} />);

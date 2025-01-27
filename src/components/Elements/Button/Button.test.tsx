@@ -2,6 +2,7 @@ import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { Button } from "./Button";
+import { vi } from "vitest";
 
 describe("Button Component", () => {
   it("renders the button with default props", () => {
@@ -23,13 +24,13 @@ describe("Button Component", () => {
     expect(button).toHaveClass("py-3 px-8 text-lg");
   });
 
-//   it("renders a loading spinner when isLoading is true", () => {
-//     render(<Button isLoading>Loading</Button>);
-//     const spinner = screen.getByRole("status");
-//     expect(spinner).toBeInTheDocument();
-//     const button = screen.getByRole("button");
-//     expect(button).toHaveClass("disabled:cursor-not-allowed disabled:opacity-70");
-//   });
+  it("renders a loading spinner when isLoading is true", () => {
+    render(<Button isLoading>Loading</Button>);
+    const spinner = screen.getByRole("status");
+    expect(spinner).toBeInTheDocument();
+    const button = screen.getByRole("button");
+    expect(button).toHaveClass("disabled:cursor-not-allowed disabled:opacity-70");
+  });
 
   it("renders the start icon correctly", () => {
     render(<Button startIcon={<span data-testid="start-icon">★</span>}>With Icon</Button>);
@@ -43,13 +44,13 @@ describe("Button Component", () => {
     expect(endIcon).toBeInTheDocument();
   });
 
-//   it("triggers onClick when clicked", () => {
-//     const handleClick = jest.fn();
-//     render(<Button onClick={handleClick}>Click Me</Button>);
-//     const button = screen.getByRole("button", { name: /click me/i });
-//     fireEvent.click(button);
-//     expect(handleClick).toHaveBeenCalledTimes(1);
-//   });
+  it("triggers onClick when clicked", () => {
+    const handleClick = vi.fn(); // Use vi.fn() instead of jest.fn()
+    render(<Button onClick={handleClick}>Click Me</Button>);
+    const button = screen.getByRole("button", { name: /click me/i });
+    fireEvent.click(button);
+    expect(handleClick).toHaveBeenCalledTimes(1);
+  });
 
   it("disables the button when disabled is true", () => {
     render(<Button disabled>Disabled</Button>);
