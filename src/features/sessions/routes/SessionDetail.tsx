@@ -31,6 +31,8 @@ export const SessionDetail = () => {
   const getSessionSecret = useGetSecretSession({ sessionId });
   const listAttendance = useListAttendance({ sessionId });
 
+  console.log(qrCodeValue);
+
   useInterval(
     () => {
       new SignJWT({
@@ -39,7 +41,7 @@ export const SessionDetail = () => {
       })
         .setProtectedHeader({ alg: "HS256" })
         .setIssuedAt()
-        .setExpirationTime("10s")
+        .setExpirationTime("60s")
         .sign(new TextEncoder().encode(getSessionSecret.data?.secret ?? ""))
         .then((token) => setQrCodeValue(token));
     },
