@@ -1,4 +1,3 @@
-import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { vi } from "vitest";
@@ -21,7 +20,7 @@ describe("Notifications Component", () => {
     const mockDismissNotification = vi.fn();
 
     // Mock the hook implementation
-    (useNotificationStore as jest.Mock).mockReturnValue({
+    (useNotificationStore as unknown as jest.Mock).mockReturnValue({
       notifications: mockNotifications,
       dismissNotification: mockDismissNotification,
     });
@@ -42,7 +41,7 @@ describe("Notifications Component", () => {
     ];
     const mockDismissNotification = vi.fn();
 
-    (useNotificationStore as jest.Mock).mockReturnValue({
+    (useNotificationStore as unknown as jest.Mock).mockReturnValue({
       notifications: mockNotifications,
       dismissNotification: mockDismissNotification,
     });
@@ -58,7 +57,7 @@ describe("Notifications Component", () => {
   });
 
   it("renders correctly with no notifications", () => {
-    (useNotificationStore as jest.Mock).mockReturnValue({
+    (useNotificationStore as unknown as jest.Mock).mockReturnValue({
       notifications: [],
       dismissNotification: vi.fn(),
     });

@@ -1,10 +1,9 @@
-import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import "@testing-library/jest-dom";
 import { MainLayout } from "./MainLayout";
 import { useAuth } from "@/stores/useAuth";
-import { vi } from "vitest"; // Import Vitest mocking utility
+import { vi, Mock } from "vitest"; // Import Vitest mocking utility and Mock type
 
 // Mock the `useAuth` hook
 vi.mock("@/stores/useAuth", () => ({
@@ -17,7 +16,7 @@ describe("MainLayout Component", () => {
 
   beforeEach(() => {
     // Mock `useAuth` to return test data
-    (useAuth as vi.Mock).mockReturnValue({
+    (useAuth as unknown as Mock).mockReturnValue({
       user: mockUser,
       logout: mockLogout,
     });
