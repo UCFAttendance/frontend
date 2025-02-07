@@ -20,6 +20,8 @@ import { MapPinIcon } from "@heroicons/react/20/solid";
 import { useCreateSession } from "../api/createSession";
 import { toast } from "sonner";
 
+const PRECISION = 0.00001;
+
 const CreateSessionSchema = z
   .object({
     faceRecognitionEnabled: z.boolean(),
@@ -114,8 +116,14 @@ export function CreateSession(props: CreateSessionProps) {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setValue("longtitute", position.coords.longitude);
-          setValue("latitude", position.coords.latitude);
+          setValue(
+            "latitude",
+            Math.round(position.coords.latitude / PRECISION) * PRECISION
+          );
+          setValue(
+            "longtitute",
+            Math.round(position.coords.longitude / PRECISION) * PRECISION
+          );
         },
         (err) => {
           toast.error(err.message);
@@ -310,17 +318,17 @@ export function CreateSession(props: CreateSessionProps) {
 
                                   <div className="grid grid-cols-2 gap-x-6 mt-2">
                                     <input
-                                      {...register("longtitute")}
+                                      {...register("latitude")}
                                       type="number"
-                                      step="0.0001"
-                                      placeholder="Longtitude"
+                                      step={PRECISION}
+                                      placeholder="Latitude"
                                       className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-1 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6"
                                     />
                                     <input
-                                      {...register("latitude")}
+                                      {...register("longtitute")}
                                       type="number"
-                                      step="0.0001"
-                                      placeholder="Latitude"
+                                      step={PRECISION}
+                                      placeholder="Longtitude"
                                       className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-1 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6"
                                     />
                                   </div>
