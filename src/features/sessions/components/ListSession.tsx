@@ -32,31 +32,31 @@ export const ListSession = ({ courseId }: ListSessionProps) => {
               <tr>
                 <th
                   scope="col"
-                  className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white bg-opacity-75 py-3.5 pl-4 pr-3 text-left font-semibold text-gray-900 backdrop-blur backdrop-filter sm:table-cell lg:pl-8"
+                  className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white bg-opacity-75 py-3.5 pl-4 pr-3 text-left font-semibold text-gray-900 backdrop-blur-sm backdrop-filter sm:table-cell lg:pl-8"
                 >
                   Session ID
                 </th>
                 <th
                   scope="col"
-                  className="sticky top-0 z-10  border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left font-semibold text-gray-900 backdrop-blur backdrop-filter "
+                  className="sticky top-0 z-10  border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left font-semibold text-gray-900 backdrop-blur-sm backdrop-filter "
                 >
                   Start Time
                 </th>
                 <th
                   scope="col"
-                  className="sticky top-0 z-10  border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left font-semibold text-gray-900 backdrop-blur backdrop-filter "
+                  className="sticky top-0 z-10  border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left font-semibold text-gray-900 backdrop-blur-sm backdrop-filter "
                 >
                   End Time
                 </th>
                 <th
                   scope="col"
-                  className="sticky top-0 z-10  border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-center font-semibold text-gray-900 backdrop-blur backdrop-filter "
+                  className="sticky top-0 z-10  border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-center font-semibold text-gray-900 backdrop-blur-sm backdrop-filter "
                 >
                   Status
                 </th>
                 <th
                   scope="col"
-                  className="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 py-3.5 pl-3 pr-4 backdrop-blur backdrop-filter sm:pr-6 lg:pr-8"
+                  className="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 py-3.5 pl-3 pr-4 backdrop-blur-sm backdrop-filter sm:pr-6 lg:pr-8"
                 >
                   <span className="sr-only">Edit</span>
                 </th>
@@ -118,7 +118,7 @@ export const ListSession = ({ courseId }: ListSessionProps) => {
                     )}
                   >
                     <button
-                      className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                      className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                       onClick={() => navigate(`/app/sessions/${session.id}`)}
                     >
                       View
@@ -141,7 +141,7 @@ export const ListSession = ({ courseId }: ListSessionProps) => {
                         leaveFrom="transform opacity-100 scale-100"
                         leaveTo="transform opacity-0 scale-95"
                       >
-                        <Menu.Items className="absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
+                        <Menu.Items className="absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-hidden">
                           <Menu.Item>
                             {({ active }) => (
                               <button

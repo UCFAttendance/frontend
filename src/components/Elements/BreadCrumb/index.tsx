@@ -21,7 +21,7 @@ export const BreadCrumb = ({ pages }: BreadCrumbProps) => {
               onClick={() => navigate("/")}
               className="text-gray-400 hover:text-gray-500"
             >
-              <HomeIcon className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
+              <HomeIcon className="h-5 w-5 shrink-0" aria-hidden="true" />
               <span className="sr-only">Home</span>
             </button>
           </div>
@@ -30,7 +30,7 @@ export const BreadCrumb = ({ pages }: BreadCrumbProps) => {
           <li key={page.name}>
             <div className="flex items-center">
               <ChevronRightIcon
-                className="h-5 w-5 flex-shrink-0 text-gray-400"
+                className="h-5 w-5 shrink-0 text-gray-400"
                 aria-hidden="true"
               />
               <button
