@@ -68,6 +68,7 @@ export function CreateSession(props: CreateSessionProps) {
     setError,
     reset,
     watch,
+    setValue,
     formState: { errors },
   } = methods;
   const watchLocationEnabled = watch("locationEnabled");
@@ -113,11 +114,8 @@ export function CreateSession(props: CreateSessionProps) {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          reset({
-            ...defaultValues,
-            longtitute: position.coords.longitude,
-            latitude: position.coords.latitude,
-          });
+          setValue("longtitute", position.coords.longitude);
+          setValue("latitude", position.coords.latitude);
         },
         (err) => {
           toast.error(err.message);
