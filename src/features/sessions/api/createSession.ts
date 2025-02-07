@@ -7,13 +7,23 @@ import { useNotificationStore } from "@/stores/notifications";
 import type { TypeSession } from "../types";
 
 interface ICreateSession {
-  course_id: string;
+  courseId: string;
+  faceRecognitionEnabled: boolean;
+  locationEnabled: boolean;
+  longtitute?: number;
+  latitude?: number;
 }
 
 export const createSession = async (
   data: ICreateSession
 ): Promise<TypeSession> => {
-  const res = await axios.post(`/api/v1/session/`, data);
+  const res = await axios.post(`/api/v1/session/`, {
+    course_id: data.courseId,
+    face_recognition_enabled: data.faceRecognitionEnabled,
+    location_enabled: data.locationEnabled,
+    longtitute: data.longtitute,
+    latitude: data.latitude,
+  });
   return res.data;
 };
 
