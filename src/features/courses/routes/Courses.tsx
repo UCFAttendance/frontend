@@ -11,7 +11,7 @@ export const Courses = () => {
 
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
-          <h2 className="text-2xl font-bold leading-4 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+          <h2 className="text-2xl font-bold leading-4 text-gray-900 sm:text-3xl sm:tracking-tight">
             Courses
           </h2>
         </div>

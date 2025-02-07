@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 import { axios } from "@/lib/axios";
 import { MutationConfig, queryClient } from "@/lib/react-query";
-import { useNotificationStore } from "@/stores/notifications";
 
 import type { TypeSession } from "../types";
 
@@ -20,24 +20,18 @@ type UseEndSessionOptions = {
 };
 
 export const useEndSession = ({ config }: UseEndSessionOptions = {}) => {
-  const { addNotification } = useNotificationStore();
-
   return useMutation({
     ...config,
     mutationFn: (data) => endSession(data),
     onSuccess: (data) => {
       queryClient.invalidateQueries(["course", `${data.course_id}`, "session"]);
-      addNotification({
-        type: "success",
-        title: "Success",
-        message: "Session endedd successfully",
+      toast.success("Success", {
+        description: "Session ended successfully",
       });
     },
     onError: (error) => {
-      addNotification({
-        type: "error",
-        title: "Error",
-        message: error.message,
+      toast.error("Error", {
+        description: error.message,
       });
     },
   });

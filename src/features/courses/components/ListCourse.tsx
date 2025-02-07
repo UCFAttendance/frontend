@@ -20,19 +20,19 @@ export const ListCourse = () => {
               <tr>
                 <th
                   scope="col"
-                  className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white bg-opacity-75 py-3.5 pl-4 pr-3 text-left font-semibold text-gray-900 backdrop-blur-sm backdrop-filter sm:table-cell lg:pl-8"
+                  className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 py-3.5 pl-4 pr-3 text-left font-semibold text-gray-900 backdrop-blur-sm backdrop-filter sm:table-cell lg:pl-8"
                 >
                   Course ID
                 </th>
                 <th
                   scope="col"
-                  className="sticky top-0 z-10  border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left font-semibold text-gray-900 backdrop-blur-sm backdrop-filter "
+                  className="sticky top-0 z-10  border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left font-semibold text-gray-900 backdrop-blur-sm backdrop-filter "
                 >
                   Name
                 </th>
                 <th
                   scope="col"
-                  className="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 py-3.5 pl-3 pr-4 backdrop-blur-sm backdrop-filter sm:pr-6 lg:pr-8"
+                  className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 pl-3 pr-4 backdrop-blur-sm backdrop-filter sm:pr-6 lg:pr-8"
                 >
                   <span className="sr-only">Edit</span>
                 </th>
