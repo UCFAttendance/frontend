@@ -1,13 +1,13 @@
 import {
   Description,
+  Dialog,
   DialogPanel,
   DialogTitle,
-  TransitionChild,
-  Dialog,
   Field,
   Label,
   Switch,
   Transition,
+  TransitionChild,
 } from "@headlessui/react";
 import { XCircleIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,7 +16,9 @@ import { Fragment, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import * as z from "zod";
 
+import { MapPinIcon } from "@heroicons/react/20/solid";
 import { useCreateSession } from "../api/createSession";
+import { toast } from "sonner";
 
 const CreateSessionSchema = z
   .object({
@@ -37,7 +39,9 @@ const CreateSessionSchema = z
     }
   );
 
-const defaultValues = {
+type CreateSessionSchemaType = z.infer<typeof CreateSessionSchema>;
+
+const defaultValues: CreateSessionSchemaType = {
   faceRecognitionEnabled: false,
   locationEnabled: false,
   longtitute: undefined,
@@ -53,7 +57,7 @@ export function CreateSession(props: CreateSessionProps) {
   const [open, setOpen] = useState(false);
   const createSessionMutation = useCreateSession();
 
-  const methods = useForm({
+  const methods = useForm<CreateSessionSchemaType>({
     resolver: zodResolver(CreateSessionSchema),
     defaultValues,
   });
@@ -63,8 +67,10 @@ export function CreateSession(props: CreateSessionProps) {
     handleSubmit,
     setError,
     reset,
+    watch,
     formState: { errors },
   } = methods;
+  const watchLocationEnabled = watch("locationEnabled");
 
   const closeSlideOver = () => {
     setOpen(false);
@@ -102,6 +108,26 @@ export function CreateSession(props: CreateSessionProps) {
       }
     );
   });
+
+  const getCurrentLocation = () => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          reset({
+            ...defaultValues,
+            longtitute: position.coords.longitude,
+            latitude: position.coords.latitude,
+          });
+        },
+        (err) => {
+          toast.error(err.message);
+        },
+        { enableHighAccuracy: true, timeout: 5000 }
+      );
+    } else {
+      toast.error("Geolocation is not supported by this browser");
+    }
+  };
 
   return (
     <>
@@ -179,7 +205,7 @@ export function CreateSession(props: CreateSessionProps) {
                               </div>
                             </div>
                           )}
-                          <form onSubmit={onSubmit}>
+                          <form onSubmit={onSubmit} className="space-y-6">
                             <div>
                               <Field className="flex items-center justify-between">
                                 <span className="flex grow flex-col">
@@ -205,7 +231,7 @@ export function CreateSession(props: CreateSessionProps) {
                                     <Switch
                                       checked={field.value}
                                       onChange={field.onChange}
-                                      className="group relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 data-[checked]:bg-indigo-600"
+                                      className="group relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 data-[checked]:bg-blue-600"
                                     >
                                       <span
                                         aria-hidden="true"
@@ -241,7 +267,7 @@ export function CreateSession(props: CreateSessionProps) {
                                     <Switch
                                       checked={field.value}
                                       onChange={field.onChange}
-                                      className="group relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 data-[checked]:bg-indigo-600"
+                                      className="group relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 data-[checked]:bg-blue-600"
                                     >
                                       <span
                                         aria-hidden="true"
@@ -252,66 +278,57 @@ export function CreateSession(props: CreateSessionProps) {
                                 />
                               </Field>
                             </div>
-                            <div>
-                              <Field className="flex items-center justify-between">
-                                <span className="flex grow flex-col">
-                                  <Label
-                                    as="span"
-                                    passive
-                                    className="text-sm/6 font-medium text-gray-900"
-                                  >
-                                    Latitude
-                                  </Label>
-                                  <Description
-                                    as="span"
-                                    className="text-sm text-gray-500"
-                                  >
-                                    Latitude of the location
-                                  </Description>
-                                </span>
+                            {watchLocationEnabled && (
+                              <>
+                                <Field className="flex flex-col">
+                                  <span className="flex grow flex-col">
+                                    <div className="flex justify-between">
+                                      <Label
+                                        as="span"
+                                        passive
+                                        className="text-sm/6 font-medium text-gray-900"
+                                      >
+                                        Location
+                                      </Label>
 
-                                <input
-                                  {...register("latitude")}
-                                  type="number"
-                                  step="0.0001"
-                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200 sm:text-sm sm:leading-6"
-                                  placeholder="Latitude"
-                                  disabled={
-                                    !methods.getValues("locationEnabled")
-                                  }
-                                />
-                              </Field>
-                            </div>
-                            <div>
-                              <Field className="flex items-center justify-between">
-                                <span className="flex grow flex-col">
-                                  <Label
-                                    as="span"
-                                    passive
-                                    className="text-sm/6 font-medium text-gray-900"
-                                  >
-                                    Longitude
-                                  </Label>
-                                  <Description
-                                    as="span"
-                                    className="text-sm text-gray-500"
-                                  >
-                                    Longitude of the location
-                                  </Description>
-                                </span>
+                                      <div className="flex items-center gap-x-1">
+                                        <MapPinIcon className="h-4 w-4 text-blue-600" />
+                                        <span
+                                          className="text-xs/6 text-blue-600 font-bold cursor-pointer"
+                                          onClick={getCurrentLocation}
+                                        >
+                                          Current Location
+                                        </span>
+                                      </div>
+                                    </div>
 
-                                <input
-                                  {...register("longtitute")}
-                                  type="number"
-                                  step="0.0001"
-                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200 sm:text-sm sm:leading-6"
-                                  placeholder="Longitude"
-                                  disabled={
-                                    !methods.getValues("locationEnabled")
-                                  }
-                                />
-                              </Field>
-                            </div>
+                                    <Description
+                                      as="span"
+                                      className="text-sm text-gray-500"
+                                    >
+                                      Coordinates of the location
+                                    </Description>
+                                  </span>
+
+                                  <div className="grid grid-cols-2 gap-x-6 mt-2">
+                                    <input
+                                      {...register("longtitute")}
+                                      type="number"
+                                      step="0.0001"
+                                      placeholder="Longtitude"
+                                      className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-1 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6"
+                                    />
+                                    <input
+                                      {...register("latitude")}
+                                      type="number"
+                                      step="0.0001"
+                                      placeholder="Latitude"
+                                      className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-1 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6"
+                                    />
+                                  </div>
+                                </Field>
+                              </>
+                            )}
                             <div className="mt-6 flex items-center justify-end gap-x-6">
                               <button
                                 type="button"
