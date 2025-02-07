@@ -19,8 +19,9 @@ import * as z from "zod";
 import { MapPinIcon } from "@heroicons/react/20/solid";
 import { useCreateSession } from "../api/createSession";
 import { toast } from "sonner";
+import { getLocationPromise } from "@/utils/getLocationPromise";
 
-const PRECISION = 0.00001;
+const TO_FIXED = 5;
 
 const CreateSessionSchema = z
   .object({
@@ -114,22 +115,29 @@ export function CreateSession(props: CreateSessionProps) {
 
   const getCurrentLocation = () => {
     if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
+      const locationPromise = getLocationPromise({
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0,
+      });
+      toast.promise(locationPromise, {
+        loading: "Getting location...",
+        success: (position) => {
           setValue(
             "latitude",
-            Math.round(position.coords.latitude / PRECISION) * PRECISION
+            parseFloat(position.coords.latitude.toFixed(TO_FIXED))
           );
           setValue(
             "longtitute",
-            Math.round(position.coords.longitude / PRECISION) * PRECISION
+            parseFloat(position.coords.longitude.toFixed(TO_FIXED))
           );
+          return "Location fetched";
         },
-        (err) => {
+        error: (err) => {
           toast.error(err.message);
+          return "Failed to get location";
         },
-        { enableHighAccuracy: true, timeout: 5000 }
-      );
+      });
     } else {
       toast.error("Geolocation is not supported by this browser");
     }
@@ -320,14 +328,14 @@ export function CreateSession(props: CreateSessionProps) {
                                     <input
                                       {...register("latitude")}
                                       type="number"
-                                      step={PRECISION}
+                                      step={`0.1e-${TO_FIXED}`}
                                       placeholder="Latitude"
                                       className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-1 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6"
                                     />
                                     <input
                                       {...register("longtitute")}
                                       type="number"
-                                      step={PRECISION}
+                                      step={`0.1e-${TO_FIXED}`}
                                       placeholder="Longtitude"
                                       className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-1 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6"
                                     />
