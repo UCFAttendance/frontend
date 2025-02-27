@@ -1,4 +1,4 @@
-import { Spinner } from "@/components/Elements";
+import { Spinner, Badge } from "@/components/Elements";
 import { BreadCrumb } from "@/components/Elements/BreadCrumb";
 import { useAuth } from "@/stores/useAuth";
 import { formatDate } from "@/utils/format";
@@ -245,7 +245,13 @@ export const SessionDetail = () => {
                           </td>
                         )}
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          {attendee.is_present}
+                          {
+                            <Badge
+                              color={attendee.is_present ? "green" : "red"}
+                            >
+                              {attendee.is_present ? "Present" : "Absent"}
+                            </Badge>
+                          }
                         </td>
                       </tr>
                     ))}
