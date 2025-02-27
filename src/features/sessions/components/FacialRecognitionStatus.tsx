@@ -1,7 +1,7 @@
 import { Badge } from "@/components/Elements";
 
 interface FacialRecognitionProps {
-  status: "PROCESSING" | "SUCCESS" | "FAILED" | "NOT_REQUIRED";
+  status: "PENDING" | "SUCCESS" | "FAILED" | "NOT_REQUIRED";
 }
 
 export const FacialRecognitionStatus = ({ status }: FacialRecognitionProps) => {
@@ -13,7 +13,7 @@ export const FacialRecognitionStatus = ({ status }: FacialRecognitionProps) => {
     return <Badge color="red">Failed</Badge>;
   }
 
-  if (status === "PROCESSING") {
+  if (status === "PENDING") {
     return <Badge color="yellow">Processing</Badge>;
   }
 

@@ -19,6 +19,6 @@ export interface TypeAttendance {
     role: "student";
   };
   created_at: string;
-  face_recognition_status: "PROCESSING" | "SUCCESS" | "FAILED" | "NOT_REQUIRED";
+  face_recognition_status: "PENDING" | "SUCCESS" | "FAILED" | "NOT_REQUIRED";
   is_present: boolean;
 }
