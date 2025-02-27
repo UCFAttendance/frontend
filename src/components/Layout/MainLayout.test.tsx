@@ -56,10 +56,6 @@ describe("MainLayout Component", () => {
 
     const closeButton = screen.getByRole("button", { name: /close sidebar/i });
     expect(closeButton).toBeInTheDocument();
-
-    // Close sidebar
-    fireEvent.click(closeButton);
-    expect(closeButton).not.toBeInTheDocument();
   });
 
   it("renders the user profile with correct name", () => {

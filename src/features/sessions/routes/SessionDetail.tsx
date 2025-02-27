@@ -2,6 +2,7 @@ import { Spinner } from "@/components/Elements";
 import { BreadCrumb } from "@/components/Elements/BreadCrumb";
 import { useAuth } from "@/stores/useAuth";
 import { formatDate } from "@/utils/format";
+
 import { ClockIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import { SignJWT } from "jose";
@@ -10,11 +11,12 @@ import { CSVLink } from "react-csv";
 import QRCode from "react-qr-code";
 import { useParams } from "react-router-dom";
 import { useInterval } from "usehooks-ts";
+
+import { useEndSession } from "../api/endSession";
 import { useGetSession } from "../api/getSession";
 import { useGetSecretSession } from "../api/getSessionSecret";
 import { useListAttendance } from "../api/listAttendance";
-import { useEndSession } from "../api/endSession";
-import { Badge } from "@/components/Elements";
+import { FacialRecognitionStatus } from "../components/FacialRecognitionStatus";
 
 const tabs = [{ name: "QR Code" }, { name: "Attendees" }];
 
@@ -204,11 +206,19 @@ export const SessionDetail = () => {
                       >
                         Time
                       </th>
+                      {getSession.data?.face_recognition_enabled && (
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                        >
+                          Facial Recognition
+                        </th>
+                      )}
                       <th
                         scope="col"
                         className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                       >
-                        Facial Recognition
+                        Status
                       </th>
                     </tr>
                   </thead>
@@ -227,14 +237,15 @@ export const SessionDetail = () => {
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           {formatDate(attendee.created_at)}
                         </td>
+                        {getSession.data?.face_recognition_enabled && (
+                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                            <FacialRecognitionStatus
+                              status={attendee.face_recognition_status}
+                            />
+                          </td>
+                        )}
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          {attendee.face_recognition_status === "SUCCESS" ? (
-                            <Badge color="green">Success</Badge>
-                          ) : attendee.face_recognition_status === "FAILED" ? (
-                            <Badge color="red">Failed</Badge>
-                          ) : (
-                            <Badge color="yellow">Pending</Badge>
-                          )}
+                          {attendee.is_present}
                         </td>
                       </tr>
                     ))}

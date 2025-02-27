@@ -1,6 +1,6 @@
 interface BadgeProps {
   children: React.ReactNode;
-  color: "red" | "green" | "blue" | "yellow";
+  color: "red" | "green" | "blue" | "yellow" | "gray";
 }
 
 export const Badge = (props: BadgeProps) => {
@@ -23,6 +23,10 @@ export const Badge = (props: BadgeProps) => {
     case "yellow":
       colorClass = "bg-yellow-100 text-yellow-800";
       svgColorClass = "fill-yellow-500";
+      break;
+    case "gray":
+      colorClass = "bg-gray-100 text-gray-700";
+      svgColorClass = "fill-gray-500";
       break;
     default:
       break;
