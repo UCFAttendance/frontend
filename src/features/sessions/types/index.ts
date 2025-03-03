@@ -6,6 +6,10 @@ export interface TypeSession {
   course_id: TypeCourse;
   start_time: string;
   end_time: string | null;
+  face_recognition_enabled: boolean;
+  location_enabled: boolean;
+  longitude: number | null;
+  latitude: number | null;
 }
 
 export interface TypeAttendance {
@@ -15,5 +19,6 @@ export interface TypeAttendance {
     role: "student";
   };
   created_at: string;
-  face_recognition_status: "PROCESSING" | "SUCCESS" | "FAILED";
+  face_recognition_status: "PENDING" | "SUCCESS" | "FAILED" | "NOT_REQUIRED";
+  is_present: boolean;
 }

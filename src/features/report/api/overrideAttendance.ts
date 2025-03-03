@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 import { axios } from "@/lib/axios";
 import { MutationConfig, queryClient } from "@/lib/react-query";
-import { useNotificationStore } from "@/stores/notifications";
 
 import type { TypeAttendanceReport } from "../types";
 
@@ -26,24 +26,18 @@ type UseOverrideAttendanceOptions = {
 export const useOverrideAttendance = ({
   config,
 }: UseOverrideAttendanceOptions = {}) => {
-  const { addNotification } = useNotificationStore();
-
   return useMutation({
     ...config,
     mutationFn: (data) => overrideAttendance(data),
     onSuccess: (data) => {
       queryClient.invalidateQueries(["attendance", `${data.id}`]);
-      addNotification({
-        type: "success",
-        title: "Success",
-        message: "Attendance has been successfully overriden.",
+      toast.success("Success", {
+        description: "Attendance has been successfully overriden.",
       });
     },
     onError: (error) => {
-      addNotification({
-        type: "error",
-        title: "Error",
-        message: error.message,
+      toast.error("Error", {
+        description: error.message,
       });
     },
   });

@@ -1,7 +1,7 @@
 import Axios from "axios";
+import { toast } from "sonner";
 
 import { API_URL } from "@/config";
-import { useNotificationStore } from "@/stores/notifications";
 import storage from "@/utils/storage";
 import { useAuth } from "@/stores/useAuth";
 
@@ -45,10 +45,8 @@ axios.interceptors.response.use(
     }
 
     const message = error.response?.data?.message || error.message;
-    useNotificationStore.getState().addNotification({
-      type: "error",
-      title: "Error",
-      message,
+    toast.error("Error", {
+      description: message,
     });
 
     useAuth.getState().logout();

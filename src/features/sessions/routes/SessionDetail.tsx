@@ -1,7 +1,8 @@
-import { Spinner } from "@/components/Elements";
+import { Spinner, Badge } from "@/components/Elements";
 import { BreadCrumb } from "@/components/Elements/BreadCrumb";
 import { useAuth } from "@/stores/useAuth";
 import { formatDate } from "@/utils/format";
+
 import { ClockIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import { SignJWT } from "jose";
@@ -10,11 +11,12 @@ import { CSVLink } from "react-csv";
 import QRCode from "react-qr-code";
 import { useParams } from "react-router-dom";
 import { useInterval } from "usehooks-ts";
+
+import { useEndSession } from "../api/endSession";
 import { useGetSession } from "../api/getSession";
 import { useGetSecretSession } from "../api/getSessionSecret";
 import { useListAttendance } from "../api/listAttendance";
-import { useEndSession } from "../api/endSession";
-import { Badge } from "@/components/Elements";
+import { FacialRecognitionStatus } from "../components/FacialRecognitionStatus";
 
 const tabs = [{ name: "QR Code" }, { name: "Attendees" }];
 
@@ -31,6 +33,8 @@ export const SessionDetail = () => {
   const getSessionSecret = useGetSecretSession({ sessionId });
   const listAttendance = useListAttendance({ sessionId });
 
+  console.log(qrCodeValue);
+
   useInterval(
     () => {
       new SignJWT({
@@ -39,7 +43,7 @@ export const SessionDetail = () => {
       })
         .setProtectedHeader({ alg: "HS256" })
         .setIssuedAt()
-        .setExpirationTime("10s")
+        .setExpirationTime("60s")
         .sign(new TextEncoder().encode(getSessionSecret.data?.secret ?? ""))
         .then((token) => setQrCodeValue(token));
     },
@@ -68,7 +72,7 @@ export const SessionDetail = () => {
         {/* Headers */}
         <div className="md:flex md:items-center md:justify-between">
           <div className="min-w-0 flex-1">
-            <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+            <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:tracking-tight">
               {getSession.data?.course_id.name}
             </h2>
             <div className="mt-2 flex items-center text text-gray-700">
@@ -82,7 +86,7 @@ export const SessionDetail = () => {
           <div>
             <button
               type="button"
-              className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+              className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
               onClick={() => endSession.mutate({ sessionId })}
             >
               End Session
@@ -103,7 +107,7 @@ export const SessionDetail = () => {
                 formatDate(getSession.data?.start_time || "") +
                 ".csv"
               }
-              className="rounded-md bg-blue-600 ml-3 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+              className="rounded-md bg-blue-600 ml-3 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-blue-600"
             >
               Export <span className="sr-only">attendees</span> as CSV
             </CSVLink>
@@ -174,7 +178,7 @@ export const SessionDetail = () => {
         <div className="mt-8 flow-root">
           <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-              <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+              <div className="overflow-hidden shadow-sm ring-1 ring-black/5 sm:rounded-lg">
                 <table className="min-w-full divide-y divide-gray-300">
                   <thead className="bg-gray-50">
                     <tr>
@@ -202,11 +206,19 @@ export const SessionDetail = () => {
                       >
                         Time
                       </th>
+                      {getSession.data?.face_recognition_enabled && (
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                        >
+                          Facial Recognition
+                        </th>
+                      )}
                       <th
                         scope="col"
                         className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                       >
-                        Facial Recognition
+                        Status
                       </th>
                     </tr>
                   </thead>
@@ -225,14 +237,21 @@ export const SessionDetail = () => {
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           {formatDate(attendee.created_at)}
                         </td>
+                        {getSession.data?.face_recognition_enabled && (
+                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                            <FacialRecognitionStatus
+                              status={attendee.face_recognition_status}
+                            />
+                          </td>
+                        )}
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          {attendee.face_recognition_status === "SUCCESS" ? (
-                            <Badge color="green">Success</Badge>
-                          ) : attendee.face_recognition_status === "FAILED" ? (
-                            <Badge color="red">Failed</Badge>
-                          ) : (
-                            <Badge color="yellow">Pending</Badge>
-                          )}
+                          {
+                            <Badge
+                              color={attendee.is_present ? "green" : "red"}
+                            >
+                              {attendee.is_present ? "Present" : "Absent"}
+                            </Badge>
+                          }
                         </td>
                       </tr>
                     ))}

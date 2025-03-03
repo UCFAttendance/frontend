@@ -1,9 +1,8 @@
-import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom"; // Provides custom matchers
 import { NoAccess } from "./index";
 import { useAuth } from "@/stores/useAuth";
-import { vi } from "vitest"; // Import Vitest mocking utility
+import { vi, Mock } from "vitest"; // Import Vitest mocking utility
 
 // Mock the `useAuth` hook
 vi.mock("@/stores/useAuth", () => ({
@@ -15,7 +14,7 @@ describe("NoAccess Component", () => {
 
   beforeEach(() => {
     // Mock the `useAuth` hook to return the mockLogout function
-    (useAuth as vi.Mock).mockReturnValue({
+    (useAuth as unknown as Mock).mockReturnValue({
       logout: mockLogout,
     });
   });

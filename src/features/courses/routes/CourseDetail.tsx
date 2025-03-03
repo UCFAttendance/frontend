@@ -20,7 +20,7 @@ export const CourseDetail = () => {
         {/* Headers */}
         <div className="md:flex md:items-center md:justify-between">
           <div className="min-w-0 flex-1">
-            <h2 className="text-2xl font-bold leading-4 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+            <h2 className="text-2xl font-bold leading-4 text-gray-900 sm:text-3xl sm:tracking-tight">
               {getCourse.data?.name}&apos;s Sessions
             </h2>
             {/* Add Session */}

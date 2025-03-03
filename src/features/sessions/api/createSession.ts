@@ -1,19 +1,29 @@
 import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 import { axios } from "@/lib/axios";
 import { MutationConfig, queryClient } from "@/lib/react-query";
-import { useNotificationStore } from "@/stores/notifications";
 
 import type { TypeSession } from "../types";
 
 interface ICreateSession {
-  course_id: string;
+  courseId: string;
+  faceRecognitionEnabled: boolean;
+  locationEnabled: boolean;
+  longtitute?: number;
+  latitude?: number;
 }
 
 export const createSession = async (
   data: ICreateSession
 ): Promise<TypeSession> => {
-  const res = await axios.post(`/api/v1/session/`, data);
+  const res = await axios.post(`/api/v1/session/`, {
+    course_id: data.courseId,
+    face_recognition_enabled: data.faceRecognitionEnabled,
+    location_enabled: data.locationEnabled,
+    longtitute: data.longtitute,
+    latitude: data.latitude,
+  });
   return res.data;
 };
 
@@ -22,24 +32,18 @@ type UseCreateSessionOptions = {
 };
 
 export const useCreateSession = ({ config }: UseCreateSessionOptions = {}) => {
-  const { addNotification } = useNotificationStore();
-
   return useMutation({
     ...config,
     mutationFn: (data) => createSession(data),
     onSuccess: (data) => {
       queryClient.invalidateQueries(["course", `${data.course_id}`, "session"]);
-      addNotification({
-        type: "success",
-        title: "Success",
-        message: "Session created successfully",
+      toast.success("Success", {
+        description: "Session created successfully",
       });
     },
     onError: (error) => {
-      addNotification({
-        type: "error",
-        title: "Error",
-        message: error.message,
+      toast.error("Error", {
+        description: error.message,
       });
     },
   });

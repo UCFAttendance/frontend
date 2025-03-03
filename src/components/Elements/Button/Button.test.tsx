@@ -1,4 +1,3 @@
-import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { Button } from "./Button";
@@ -26,7 +25,7 @@ describe("Button Component", () => {
 
   it("renders a loading spinner when isLoading is true", () => {
     render(<Button isLoading>Loading</Button>);
-    const spinner = screen.getByTestId("loading");
+    const spinner = screen.getByRole("status");
     expect(spinner).toBeInTheDocument();
     const button = screen.getByRole("button");
     expect(button).toHaveClass(
@@ -52,6 +51,13 @@ describe("Button Component", () => {
     expect(endIcon).toBeInTheDocument();
   });
 
+  it("triggers onClick when clicked", () => {
+    const handleClick = vi.fn(); // Use vi.fn() instead of jest.fn()
+    render(<Button onClick={handleClick}>Click Me</Button>);
+    const button = screen.getByRole("button", { name: /click me/i });
+    fireEvent.click(button);
+    expect(handleClick).toHaveBeenCalledTimes(1);
+  });
   it("triggers onClick when clicked", () => {
     const handleClick = vi.fn();
     render(<Button onClick={handleClick}>Click Me</Button>);
