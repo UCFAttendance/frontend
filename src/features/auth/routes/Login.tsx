@@ -3,6 +3,7 @@ import { useAuth } from "@/stores/useAuth";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { Link } from "react-router-dom";
 
 const LoginSchema = z.object({
   email: z.string().email("Invalid email").min(1, "Email is required"),
@@ -68,12 +69,12 @@ export const Login = () => {
                     Password
                   </label>
                   <div className="text-sm">
-                    <a
-                      href="#"
+                    <Link
+                      to="/forgot-password"
                       className="font-semibold text-blue-600 hover:text-blue-500"
                     >
                       Forgot password?
-                    </a>
+                    </Link>
                   </div>
                 </div>
                 <div className="mt-2">
