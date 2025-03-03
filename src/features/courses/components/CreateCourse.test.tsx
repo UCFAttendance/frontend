@@ -1,4 +1,3 @@
-import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { CreateCourse } from "./CreateCourse";
 import { useCreateCourse } from "../api/createCourse";
@@ -83,14 +82,17 @@ describe("CreateCourse Component", () => {
 
   it("displays an error message if the mutation fails", async () => {
     (useCreateCourse as any).mockReturnValue({
-      mutate: (data: any, options: any) => {
-        options.onError({
-          response: {
-            data: {
-              detail: "Failed to create course",
+      mutate: (_data: any, options: any) => {
+        if (options?.onError) {
+          options.onError({
+            response: {
+              data: {
+                detail: "Failed to create course",
+              },
             },
-          },
-        });
+          });
+        }
+        return Promise.resolve();
       },
       isLoading: false,
     });

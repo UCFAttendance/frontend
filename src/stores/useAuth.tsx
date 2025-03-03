@@ -42,8 +42,11 @@ export const useAuth = create<IAuthState>()(
             `${window.location.origin}/auth/login` as unknown as string;
         },
         forgotPassword: async (email: string) => {
-          // Implement the API call here
-          await authAxios.post("/api-auth/v1/forgot-password/", { email });
+          try {
+            await axios.post("/api-auth/v1/forgot-password/", { email });
+          } catch (error) {
+            // ... error handling
+          }
         },
       }),
       { name: "auth" }
