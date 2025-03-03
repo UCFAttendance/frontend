@@ -56,12 +56,12 @@ export function CreateCourse() {
           } else if (err instanceof AxiosError) {
             setError("root", {
               type: "manual",
-              message: err.response?.data?.detail || "Something went wrong",
+              message: err.response?.data?.detail || "Failed to create course",
             });
           } else {
             setError("root", {
               type: "manual",
-              message: "Something went wrong",
+              message: "Failed to create course",
             });
           }
         },

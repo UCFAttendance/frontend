@@ -11,6 +11,14 @@ export const ListCourse = () => {
   const listCourse = useListCourse();
   const deleteCourse = useDeleteCourse();
 
+  if (listCourse.isLoading) {
+    return (
+      <div role="status" className="flex justify-center items-center py-12">
+        <div className="animate-spin h-8 w-8 border-4 border-blue-600 border-t-transparent rounded-full" />
+      </div>
+    );
+  }
+
   return (
     <div className="mt-8 flow-root">
       <div className="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
