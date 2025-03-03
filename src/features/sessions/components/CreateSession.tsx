@@ -27,13 +27,18 @@ const CreateSessionSchema = z
   .object({
     faceRecognitionEnabled: z.boolean(),
     locationEnabled: z.boolean(),
-    longtitute: z.number().optional(),
-    latitude: z.number().optional(),
+    longitude: z.string().or(z.number()).optional(),
+    latitude: z.string().or(z.number()).optional(),
   })
   .refine(
     (data) => {
       if (data.locationEnabled) {
-        return data.longtitute !== undefined && data.latitude !== undefined;
+        return (
+          data.longitude !== undefined &&
+          data.latitude !== undefined &&
+          !isNaN(Number(data.longitude)) &&
+          !isNaN(Number(data.latitude))
+        );
       }
       return true;
     },
@@ -47,7 +52,7 @@ type CreateSessionSchemaType = z.infer<typeof CreateSessionSchema>;
 const defaultValues: CreateSessionSchemaType = {
   faceRecognitionEnabled: false,
   locationEnabled: false,
-  longtitute: undefined,
+  longitude: undefined,
   latitude: undefined,
 };
 
@@ -128,7 +133,7 @@ export function CreateSession(props: CreateSessionProps) {
             parseFloat(position.coords.latitude.toFixed(TO_FIXED))
           );
           setValue(
-            "longtitute",
+            "longitude",
             parseFloat(position.coords.longitude.toFixed(TO_FIXED))
           );
           return "Location fetched";
@@ -333,10 +338,10 @@ export function CreateSession(props: CreateSessionProps) {
                                       className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-1 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6"
                                     />
                                     <input
-                                      {...register("longtitute")}
+                                      {...register("longitude")}
                                       type="number"
                                       step={`0.1e-${TO_FIXED}`}
-                                      placeholder="Longtitude"
+                                      placeholder="Longitude"
                                       className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-1 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6"
                                     />
                                   </div>
@@ -345,18 +350,18 @@ export function CreateSession(props: CreateSessionProps) {
                             )}
                             <div className="mt-6 flex items-center justify-end gap-x-6">
                               <button
-                                type="button"
-                                className="text-sm font-semibold leading-6 text-gray-900"
-                                onClick={() => closeSlideOver()}
-                              >
-                                Cancel
-                              </button>
-                              <button
                                 type="submit"
                                 className="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-500"
                                 disabled={createSessionMutation.isLoading}
                               >
                                 Save
+                              </button>
+                              <button
+                                type="button"
+                                className="text-sm font-semibold leading-6 text-gray-900"
+                                onClick={() => closeSlideOver()}
+                              >
+                                Cancel
                               </button>
                             </div>
                           </form>

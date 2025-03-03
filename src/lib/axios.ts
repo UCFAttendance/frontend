@@ -49,7 +49,10 @@ axios.interceptors.response.use(
       description: message,
     });
 
-    useAuth.getState().logout();
+    if (error.response?.status === 401 && originalRequest.retry) {
+      useAuth.getState().logout();
+    }
+
     return Promise.reject(error);
   }
 );

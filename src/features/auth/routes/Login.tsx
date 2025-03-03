@@ -1,9 +1,10 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FormProvider, useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
+import * as z from "zod";
+
 import logo from "@/assets/logo.png";
 import { useAuth } from "@/stores/useAuth";
-import { FormProvider, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { Link } from "react-router-dom";
 
 const LoginSchema = z.object({
   email: z.string().email("Invalid email").min(1, "Email is required"),
@@ -70,7 +71,7 @@ export const Login = () => {
                   </label>
                   <div className="text-sm">
                     <Link
-                      to="/forgot-password"
+                      to="/auth/forgot-password"
                       className="font-semibold text-blue-600 hover:text-blue-500"
                     >
                       Forgot password?
@@ -91,7 +92,7 @@ export const Login = () => {
               <div>
                 <button
                   type="submit"
-                  className="flex w-full justify-center rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-xs hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                  className="flex w-full justify-center rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-xs hover:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                 >
                   Sign in
                 </button>

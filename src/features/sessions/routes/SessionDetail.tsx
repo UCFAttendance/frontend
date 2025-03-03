@@ -45,7 +45,14 @@ export const SessionDetail = () => {
         .setIssuedAt()
         .setExpirationTime("60s")
         .sign(new TextEncoder().encode(getSessionSecret.data?.secret ?? ""))
-        .then((token) => setQrCodeValue(token));
+        .then((token) =>
+          setQrCodeValue(
+            JSON.stringify({
+              token,
+              locationEnabled: getSession.data?.location_enabled,
+            })
+          )
+        );
     },
     activeTab === "QR Code" ? 1000 : null
   );

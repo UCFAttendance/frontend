@@ -10,8 +10,8 @@ interface ICreateSession {
   courseId: string;
   faceRecognitionEnabled: boolean;
   locationEnabled: boolean;
-  longtitute?: number;
-  latitude?: number;
+  longitude?: number | string;
+  latitude?: number | string;
 }
 
 export const createSession = async (
@@ -21,7 +21,7 @@ export const createSession = async (
     course_id: data.courseId,
     face_recognition_enabled: data.faceRecognitionEnabled,
     location_enabled: data.locationEnabled,
-    longtitute: data.longtitute,
+    longitude: data.longitude,
     latitude: data.latitude,
   });
   return res.data;
