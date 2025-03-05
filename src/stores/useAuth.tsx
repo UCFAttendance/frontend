@@ -15,7 +15,6 @@ interface IAuthState {
   loadUser: () => Promise<void | Error>;
   login: (credentials: LoginCredentialsDTO) => Promise<void | Error>;
   logout: () => void;
-  forgotPassword: (email: string) => Promise<void>;
 }
 
 export const useAuth = create<IAuthState>()(
@@ -40,13 +39,6 @@ export const useAuth = create<IAuthState>()(
           set({ user: null });
           window.location.href =
             `${window.location.origin}/auth/login` as unknown as string;
-        },
-        forgotPassword: async (email: string) => {
-          try {
-            await axios.post("/api-auth/v1/forgot-password/", { email });
-          } catch (error) {
-            // ... error handling
-          }
         },
       }),
       { name: "auth" }
