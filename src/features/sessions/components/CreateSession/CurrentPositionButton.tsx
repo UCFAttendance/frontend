@@ -1,4 +1,5 @@
 import { MapPinIcon } from "@heroicons/react/20/solid";
+import { useCallback } from "react";
 import { useMap } from "react-map-gl/mapbox";
 import { toast } from "sonner";
 
@@ -7,7 +8,7 @@ import { getLocationPromise } from "@/utils/getLocationPromise";
 export const CurrentPositionButton = () => {
   const { current: map } = useMap();
 
-  const getCurrentLocation = () => {
+  const getCurrentLocation = useCallback(() => {
     if ("geolocation" in navigator) {
       const locationPromise = getLocationPromise({
         enableHighAccuracy: true,
@@ -31,7 +32,7 @@ export const CurrentPositionButton = () => {
     } else {
       toast.error("Geolocation is not supported by this browser");
     }
-  };
+  }, [map]);
 
   return (
     <div className="absolute top-2 right-2 p-2 bg-white rounded-md cursor-pointer">
