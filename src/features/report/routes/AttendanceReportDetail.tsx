@@ -117,7 +117,7 @@ export const AttendanceReportDetail = () => {
                   </dt>
                   <img
                     className="h-auto w-full max-w-xs mt-4 transition-all duration-300 rounded-lg blur-lg hover:blur-none"
-                    src={getAttendanceReport.data?.face_image}
+                    src={getAttendanceReport.data?.signed_face_image}
                     alt="Attendance image"
                   />
                 </div>
