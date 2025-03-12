@@ -21,8 +21,8 @@ export const createSession = async (
     course_id: data.courseId,
     face_recognition_enabled: data.faceRecognitionEnabled,
     location_enabled: data.locationEnabled,
-    longitude: data.longitude,
-    latitude: data.latitude,
+    longitude: data.locationEnabled ? data.longitude : null,
+    latitude: data.locationEnabled ? data.latitude : null,
   });
   return res.data;
 };
