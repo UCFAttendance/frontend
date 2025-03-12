@@ -16,19 +16,15 @@ import { Fragment, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import * as z from "zod";
 
-import { MapPinIcon } from "@heroicons/react/20/solid";
-import { useCreateSession } from "../api/createSession";
-import { toast } from "sonner";
-import { getLocationPromise } from "@/utils/getLocationPromise";
-
-const TO_FIXED = 5;
+import { useCreateSession } from "../../api/createSession";
+import { Map } from "./Map";
 
 const CreateSessionSchema = z
   .object({
     faceRecognitionEnabled: z.boolean(),
     locationEnabled: z.boolean(),
-    longitude: z.string().or(z.number()).optional(),
-    latitude: z.string().or(z.number()).optional(),
+    longitude: z.number(),
+    latitude: z.number(),
   })
   .refine(
     (data) => {
@@ -52,8 +48,8 @@ type CreateSessionSchemaType = z.infer<typeof CreateSessionSchema>;
 const defaultValues: CreateSessionSchemaType = {
   faceRecognitionEnabled: false,
   locationEnabled: false,
-  longitude: undefined,
-  latitude: undefined,
+  latitude: 28.6008072,
+  longitude: -81.2022486,
 };
 
 interface CreateSessionProps {
@@ -71,7 +67,6 @@ export function CreateSession(props: CreateSessionProps) {
   });
 
   const {
-    register,
     handleSubmit,
     setError,
     reset,
@@ -117,36 +112,6 @@ export function CreateSession(props: CreateSessionProps) {
       }
     );
   });
-
-  const getCurrentLocation = () => {
-    if ("geolocation" in navigator) {
-      const locationPromise = getLocationPromise({
-        enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 0,
-      });
-      toast.promise(locationPromise, {
-        loading: "Getting location...",
-        success: (position) => {
-          setValue(
-            "latitude",
-            parseFloat(position.coords.latitude.toFixed(TO_FIXED))
-          );
-          setValue(
-            "longitude",
-            parseFloat(position.coords.longitude.toFixed(TO_FIXED))
-          );
-          return "Location fetched";
-        },
-        error: (err) => {
-          toast.error(err.message);
-          return "Failed to get location";
-        },
-      });
-    } else {
-      toast.error("Geolocation is not supported by this browser");
-    }
-  };
 
   return (
     <>
@@ -309,16 +274,6 @@ export function CreateSession(props: CreateSessionProps) {
                                       >
                                         Location
                                       </Label>
-
-                                      <div className="flex items-center gap-x-1">
-                                        <MapPinIcon className="h-4 w-4 text-blue-600" />
-                                        <span
-                                          className="text-xs/6 text-blue-600 font-bold cursor-pointer"
-                                          onClick={getCurrentLocation}
-                                        >
-                                          Current Location
-                                        </span>
-                                      </div>
                                     </div>
 
                                     <Description
@@ -329,22 +284,14 @@ export function CreateSession(props: CreateSessionProps) {
                                     </Description>
                                   </span>
 
-                                  <div className="grid grid-cols-2 gap-x-6 mt-2">
-                                    <input
-                                      {...register("latitude")}
-                                      type="number"
-                                      step={`0.1e-${TO_FIXED}`}
-                                      placeholder="Latitude"
-                                      className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-1 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6"
-                                    />
-                                    <input
-                                      {...register("longitude")}
-                                      type="number"
-                                      step={`0.1e-${TO_FIXED}`}
-                                      placeholder="Longitude"
-                                      className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-1 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6"
-                                    />
-                                  </div>
+                                  <Map
+                                    initialLatitude={defaultValues.latitude}
+                                    initialLongitude={defaultValues.longitude}
+                                    onLocationChange={(longitude, latitude) => {
+                                      setValue("longitude", longitude);
+                                      setValue("latitude", latitude);
+                                    }}
+                                  />
                                 </Field>
                               </>
                             )}
