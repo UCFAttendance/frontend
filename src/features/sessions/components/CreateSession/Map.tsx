@@ -1,8 +1,7 @@
 import Mapbox from "react-map-gl/mapbox";
 import { CurrentPositionButton } from "./CurrentPositionButton";
 
-const TOKEN =
-  "pk.eyJ1IjoieGhvYW50cmFuIiwiYSI6ImNtODUzd3BhbTBsaGoycXBncHU4ZGVzYXQifQ.LI4ExSJEqOUfIG3T2jGRqw";
+const TOKEN = import.meta.env.VITE_MAPBOX_TOKEN as string;
 
 interface MapProps {
   initialLongitude: number;
