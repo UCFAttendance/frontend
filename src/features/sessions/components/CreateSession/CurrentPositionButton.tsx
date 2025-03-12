@@ -11,14 +11,15 @@ export const CurrentPositionButton = () => {
     if ("geolocation" in navigator) {
       const locationPromise = getLocationPromise({
         enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 0,
+        timeout: 10000,
+        maximumAge: 60000,
       });
       toast.promise(locationPromise, {
         loading: "Getting location...",
         success: (position) => {
           map?.flyTo({
             center: [position.coords.longitude, position.coords.latitude],
+            maxDuration: 500,
           });
           return "Location fetched";
         },
