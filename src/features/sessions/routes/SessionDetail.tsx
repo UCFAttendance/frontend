@@ -1,4 +1,4 @@
-import { Spinner, Badge } from "@/components/Elements";
+import { Spinner } from "@/components/Elements";
 import { BreadCrumb } from "@/components/Elements/BreadCrumb";
 import { useAuth } from "@/stores/useAuth";
 import { formatDate } from "@/utils/format";
@@ -17,6 +17,7 @@ import { useGetSession } from "../api/getSession";
 import { useGetSecretSession } from "../api/getSessionSecret";
 import { useListAttendance } from "../api/listAttendance";
 import { FacialRecognitionStatus } from "../components/FacialRecognitionStatus";
+import { PresentStatus } from "../components/PresentStatus";
 
 const tabs = [{ name: "QR Code" }, { name: "Attendees" }];
 
@@ -252,13 +253,12 @@ export const SessionDetail = () => {
                           </td>
                         )}
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          {
-                            <Badge
-                              color={attendee.is_present ? "green" : "red"}
-                            >
-                              {attendee.is_present ? "Present" : "Absent"}
-                            </Badge>
-                          }
+                          <PresentStatus
+                            faceRecognitionStatus={
+                              attendee.face_recognition_status
+                            }
+                            isPresent={attendee.is_present}
+                          />
                         </td>
                       </tr>
                     ))}
