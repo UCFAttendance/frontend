@@ -16,6 +16,7 @@ import { Fragment, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import * as z from "zod";
 
+import { useSessionCreationStore } from "@/stores/useSessionCreationStore";
 import { useCreateSession } from "../../api/createSession";
 import { Map } from "./Map";
 
@@ -43,7 +44,7 @@ const CreateSessionSchema = z
     }
   );
 
-type CreateSessionSchemaType = z.infer<typeof CreateSessionSchema>;
+export type CreateSessionSchemaType = z.infer<typeof CreateSessionSchema>;
 
 const defaultValues: CreateSessionSchemaType = {
   faceRecognitionEnabled: false,
@@ -60,16 +61,18 @@ export function CreateSession(props: CreateSessionProps) {
   const { courseId } = props;
   const [open, setOpen] = useState(false);
   const createSessionMutation = useCreateSession();
+  const { session, setSession } = useSessionCreationStore();
 
   const methods = useForm<CreateSessionSchemaType>({
     resolver: zodResolver(CreateSessionSchema),
-    defaultValues,
+    defaultValues: async () => {
+      return session ? session : defaultValues;
+    },
   });
 
   const {
     handleSubmit,
     setError,
-    reset,
     watch,
     setValue,
     formState: { errors },
@@ -78,7 +81,6 @@ export function CreateSession(props: CreateSessionProps) {
 
   const closeSlideOver = () => {
     setOpen(false);
-    reset(defaultValues);
   };
 
   const onSubmit = handleSubmit((values) => {
@@ -90,6 +92,7 @@ export function CreateSession(props: CreateSessionProps) {
       {
         onSuccess: () => {
           closeSlideOver();
+          setSession(values);
         },
         onError: (err: unknown) => {
           if (typeof err === "string") {
