@@ -50,12 +50,9 @@ export const protectedRoutes = [
     children: [
       { path: "/app/courses/*", element: <CourseRoutes /> },
       { path: "/app/sessions/*", element: <SessionRoutes /> },
-      {
-        path: "/app/reports/*",
-        element: <AttendanceReportRoutes />,
-      },
-      { path: "*", element: <Navigate to="." /> },
+      { path: "/app/reports/*", element: <AttendanceReportRoutes /> },
+      { path: "*", element: <Navigate to="./app/course/" /> },
     ],
   },
-  { path: "*", element: <Navigate to="/app" /> },
+  { path: "*", element: <Navigate to="/app/courses/" /> },
 ];

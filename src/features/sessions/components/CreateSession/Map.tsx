@@ -31,8 +31,8 @@ export const Map = (props: MapProps) => {
         mapboxAccessToken={TOKEN}
         onMove={onMove}
       >
-        <div className="absolute top-1/2 left-1/2 transform -translate-1/2 bg-red-500/15 rounded-full border border-red-500 size-25" />
-        <div className="absolute top-1/2 left-1/2 transform -translate-1/2 w-2 h-2 bg-red-500 rounded-full" />
+        <div className="absolute top-1/2 left-1/2 transform -translate-1/2 bg-red-500/15 rounded-full border border-red-500 size-25 pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 transform -translate-1/2 w-2 h-2 bg-red-500 rounded-full pointer-events-none" />
         <CurrentPositionButton />
       </Mapbox>
     </div>
